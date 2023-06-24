@@ -166,6 +166,16 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'ThePrimeagen/harpoon',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+
+      menu = {
+        width = 100,
+      }
+    }
+  },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -281,6 +291,16 @@ map('i', 'kk', '<Esc>')
 
 -- Clear search highlighting with <leader> and c
 map('n', '<leader>hh', ':nohl<CR>')
+-- harpoon
+map("n", "<leader>hu", "<Cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = "[H]arpoon [U]I-Menu" })
+map("n", "<leader>h1", "<Cmd>lua require('harpoon.ui').nav_file(1)<CR>", { desc = "[H]arpoon [1] entry" })
+map("n", "<leader>h2", "<Cmd>lua require('harpoon.ui').nav_file(2)<CR>", { desc = "[H]arpoon [2] entry" })
+map("n", "<leader>h3", "<Cmd>lua require('harpoon.ui').nav_file(3)<CR>", { desc = "[H]arpoon [3] entry" })
+map("n", "<leader>h4", "<Cmd>lua require('harpoon.ui').nav_file(4)<CR>", { desc = "[H]arpoon [4] entry" })
+map("n", "<leader>h5", "<Cmd>lua require('harpoon.ui').nav_file(5)<CR>", { desc = "[H]arpoon [5] entry" })
+map("n", "<leader>ha", "<Cmd>lua require('harpoon.mark').add_file()<CR>", { desc = "[H]arpoon [A]dd File" })
+map("n", "<leader>hj", "<Cmd>lua require('harpoon.ui').nav_next()<CR>", { desc = "[H]arpoon Next File" })
+map("n", "<leader>hk", "<Cmd>lua require('harpoon.ui').nav_prev()<CR>", { desc = "[H]arpoon Previous File" })
 map("n", "<A-j>", "ddp", { desc = "Line down" })
 map("n", "<A-k>", "ddkP", { desc = "Line up" })
 
