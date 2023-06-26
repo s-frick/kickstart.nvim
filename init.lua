@@ -173,8 +173,8 @@ require('lazy').setup({
 
       menu = {
         width = 100,
-      }
-    }
+      },
+    },
   },
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -201,7 +201,30 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-
+  {
+    'jay-babu/mason-null-ls.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = {
+      'williamboman/mason.nvim',
+      'jose-elias-alvarez/null-ls.nvim',
+    },
+    opts = {
+      ensure_installed = {
+        -- Opt to list sources here, when available in mason.
+        'java',
+        'json',
+        'yaml',
+        'javascript',
+        'bash',
+        'typescript',
+      },
+      automatic_installation = false,
+      handlers = {},
+    },
+    -- config = function()
+    --   require("custom.plugins.null-ls.lua") -- require your null-ls config here (example below)
+    -- end,
+  },
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -292,17 +315,17 @@ map('i', 'kk', '<Esc>')
 -- Clear search highlighting with <leader> and c
 map('n', '<leader>hh', ':nohl<CR>')
 -- harpoon
-map("n", "<leader>hu", "<Cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = "[H]arpoon [U]I-Menu" })
-map("n", "<leader>h1", "<Cmd>lua require('harpoon.ui').nav_file(1)<CR>", { desc = "[H]arpoon [1] entry" })
-map("n", "<leader>h2", "<Cmd>lua require('harpoon.ui').nav_file(2)<CR>", { desc = "[H]arpoon [2] entry" })
-map("n", "<leader>h3", "<Cmd>lua require('harpoon.ui').nav_file(3)<CR>", { desc = "[H]arpoon [3] entry" })
-map("n", "<leader>h4", "<Cmd>lua require('harpoon.ui').nav_file(4)<CR>", { desc = "[H]arpoon [4] entry" })
-map("n", "<leader>h5", "<Cmd>lua require('harpoon.ui').nav_file(5)<CR>", { desc = "[H]arpoon [5] entry" })
-map("n", "<leader>ha", "<Cmd>lua require('harpoon.mark').add_file()<CR>", { desc = "[H]arpoon [A]dd File" })
-map("n", "<leader>hj", "<Cmd>lua require('harpoon.ui').nav_next()<CR>", { desc = "[H]arpoon Next File" })
-map("n", "<leader>hk", "<Cmd>lua require('harpoon.ui').nav_prev()<CR>", { desc = "[H]arpoon Previous File" })
-map("n", "<A-j>", "ddp", { desc = "Line down" })
-map("n", "<A-k>", "ddkP", { desc = "Line up" })
+map('n', '<leader>hu', "<Cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = '[H]arpoon [U]I-Menu' })
+map('n', '<leader>h1', "<Cmd>lua require('harpoon.ui').nav_file(1)<CR>", { desc = '[H]arpoon [1] entry' })
+map('n', '<leader>h2', "<Cmd>lua require('harpoon.ui').nav_file(2)<CR>", { desc = '[H]arpoon [2] entry' })
+map('n', '<leader>h3', "<Cmd>lua require('harpoon.ui').nav_file(3)<CR>", { desc = '[H]arpoon [3] entry' })
+map('n', '<leader>h4', "<Cmd>lua require('harpoon.ui').nav_file(4)<CR>", { desc = '[H]arpoon [4] entry' })
+map('n', '<leader>h5', "<Cmd>lua require('harpoon.ui').nav_file(5)<CR>", { desc = '[H]arpoon [5] entry' })
+map('n', '<leader>ha', "<Cmd>lua require('harpoon.mark').add_file()<CR>", { desc = '[H]arpoon [A]dd File' })
+map('n', '<leader>hj', "<Cmd>lua require('harpoon.ui').nav_next()<CR>", { desc = '[H]arpoon Next File' })
+map('n', '<leader>hk', "<Cmd>lua require('harpoon.ui').nav_prev()<CR>", { desc = '[H]arpoon Previous File' })
+map('n', '<A-j>', 'ddp', { desc = 'Line down' })
+map('n', '<A-k>', 'ddkP', { desc = 'Line up' })
 
 -- [[ highlight on yank ]]
 -- see `:help vim.highlight.on_yank()`
@@ -483,6 +506,9 @@ local servers = {
   tsserver = {},
   lua_ls = {
     Lua = {
+      diagnostics = {
+        globals = { 'vim' },
+      },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
     },
@@ -560,7 +586,7 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-vim.cmd([[colorscheme everforest]])
+vim.cmd [[colorscheme everforest]]
 vim.cmd [[
   source ~/.config/nvim/options.vim
   " source ~/.config/nvim/mappings.vim
