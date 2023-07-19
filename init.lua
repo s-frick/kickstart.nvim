@@ -63,55 +63,16 @@ require('lazy').setup {
     end,
     dependencies = { { 'nvim-tree/nvim-web-devicons' } },
   }, -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
-  {
-    -- Adds git releated signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-      on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, {
-          buffer = bufnr,
-          desc = '[G]o to [P]revious Hunk',
-        })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-      end,
-    },
-  },
-  {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = true,
-        -- theme = "everforest",
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
-  },
+  { 'folke/which-key.nvim',   opts = {} },
+  { 'ckolkey/ts-node-action', dependencies = { 'nvim-treesitter' }, opts = {} },
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = { char = '┊', show_trailing_blankline_indent = false },
-  }, -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-  {
-    'ThePrimeagen/harpoon',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { menu = { width = 100 } },
-  }, -- Fuzzy Finder (files, lsp, etc)
+  },                                      -- "gc" to comment visual regions/lines
+  { 'numToStr/Comment.nvim',     opts = {} }, -- {
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
@@ -124,22 +85,7 @@ require('lazy').setup {
       return vim.fn.executable 'make' == 1
     end,
   },
-  {
-    -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
-    build = ':TSUpdate',
-    ensure_installed = {
-      'lua',
-      'vim',
-      'vimdoc',
-      'java',
-      'javascript',
-      'typescript',
-      'markdown',
-      'markdown_inline',
-    },
-  },
+  { 'echasnovski/mini.surround', version = '*' },
   { import = 'custom.plugins' },
   { import = 'kickstart.plugins' },
 }
@@ -278,11 +224,12 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 local lsp = require('lsp-zero').preset {}
 
-lsp.on_attach(function(client, bufnr)
+local on_attach = function(client, bufnr)
   lsp.default_keymaps { buffer = bufnr }
-end)
+end
+lsp.on_attach(on_attach)
 
-lsp.skip_server_setup { 'jdtls' }
+lsp.skip_server_setup { 'jdtls', 'ocamllsp' }
 
 lsp.format_mapping('gq', {
   format_opts = { async = false, timeout_ms = 10000 },
@@ -337,6 +284,9 @@ require('mason-null-ls').setup {
 local lspconfig = require 'lspconfig'
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lspconfig.lua_ls.setup { settings = { Lua = { diagnostics = { globals = { 'vim' } } } } }
+
+lspconfig.ocamllsp.setup {}
+lspconfig.ocamlls.setup {}
 
 lsp.setup()
 

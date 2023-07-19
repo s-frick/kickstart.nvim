@@ -33,3 +33,8 @@ set noswapfile
 " smart autoindenting when starting a new line
 set smartindent
 nnoremap <silent> <leader>gg :LazyGit<CR>
+
+" augroup cdpwd
+"     autocmd!
+"     autocmd VimEnter * cd $PWD
+" augroup END
