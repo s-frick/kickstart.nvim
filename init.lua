@@ -612,6 +612,7 @@ require('lazy').setup({
           end,
         },
       }
+      --
     end,
   },
 
@@ -752,6 +753,9 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+        },
+        window = {
+          documentation = cmp.config.window.bordered(),
         },
       }
     end,
@@ -925,5 +929,31 @@ require('lazy').setup({
 })
 -- function some(a, b) end
 
+-- Specify how the border looks like
+local border = {
+  { '┌', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '┐', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+  { '┘', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '└', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+}
+
+-- Add border to the diagnostic popup window
+vim.diagnostic.config {
+  virtual_text = {
+    prefix = '■ ', -- Could be '●', '▎', 'x', '■', , 
+  },
+  float = { border = border },
+}
+
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or border
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
