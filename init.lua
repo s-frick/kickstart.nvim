@@ -818,6 +818,9 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
     opts = {
       ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
@@ -830,6 +833,29 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+
+          keymaps = {
+            ['af'] = { query = '@function.outer', desc = 'Select outer part of a function region' },
+            ['if'] = { query = '@function.inner', desc = 'Select inner part of a function region' },
+            ['ac'] = { query = '@class.outer', desc = 'Select outer part of a class region' },
+            ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ['<leader>a'] = '@parameter.inner',
+          },
+          swap_previous = {
+            ['<leader>A'] = '@parameter.inner',
+          },
+        },
+      },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -846,6 +872,12 @@ require('lazy').setup({
       --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    enable = true,
+    max_lines = 0,
+    line_numbers = true,
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -891,6 +923,7 @@ require('lazy').setup({
     },
   },
 })
+-- function some(a, b) end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
